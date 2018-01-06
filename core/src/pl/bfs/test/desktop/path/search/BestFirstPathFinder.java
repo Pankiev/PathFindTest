@@ -6,58 +6,55 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 import pl.bfs.test.desktop.path.search.collisionDetectors.CollisionDetector;
 import pl.bfs.test.desktop.path.search.distanceComparators.DistanceComparator;
 
 public class BestFirstPathFinder implements PathFinder
 {
-	HashMap<Point,Point> parents=new HashMap<>();
-	Point startPoint=null;
-	Point endPoint=null;
 
 	@Override
-	public Collection<? extends Point> find(Point from, Point destination, DistanceComparator distanceComparator, CollisionDetector collisionDetector)
+	public Collection<? extends Point> find(Point from, Point destination, DistanceComparator distanceComparator,
+			CollisionDetector collisionDetector)
 	{
-		startPoint=new Point(from);
-		endPoint=new Point(destination);
-		List<Point> openList = new ArrayList<>();
+		Map<Point, Point> parents = new HashMap<>();
+		PriorityQueue<Point> openList = new PriorityQueue<>(distanceComparator);
 		List<Point> closedList = new ArrayList<>();
-		openList.add(new Point(from));
-		Point n=null;
+		openList.add(from);
+		Point n = null; 
 		while (!openList.isEmpty())
 		{
-			Collections.sort(openList,distanceComparator);
-			n = openList.get(0);
+			n = openList.poll(); 
 			if (n.equals(destination))
-				return createPath();
+				return createPath(from, destination, parents);
 
 			closedList.add(n);
-			openList.remove(n);
 			List<Point> successors = createSuccessors(n, collisionDetector);
-			for (Point successorNotComparable:successors)
+			for (Point successor: successors)
 			{
-				Point successor=new Point(successorNotComparable);
-				if(!closedList.contains(successor) && !openList.contains(successor)) {
+				if (!closedList.contains(successor) && !openList.contains(successor))
+				{
 					openList.add(successor);
-					if(!parents.containsKey(new Point(successor))){
-						parents.put(successor,n);
-					}
+					if (!parents.containsKey(successor))
+						parents.put(successor, n);
 				}
-			};
+			}
 		}
 
-		endPoint=n;
-		return createPath();
+		return createPath(from, n, parents);
 	}
 
-	private Collection<? extends Point> createPath() {
-		List<Point> path=new ArrayList<>();
-		Point current=endPoint;
+	private Collection<? extends Point> createPath(Point startPoint, Point endPoint, Map<Point, Point> parents)
+	{
+		List<Point> path = new ArrayList<>();
+		Point current = endPoint;
 
-		while(!current.equals(startPoint)){
+		while (!current.equals(startPoint))
+		{
 			path.add(current);
-			current=parents.get(current);
+			current = parents.get(current);
 		}
 		path.add(current);
 
@@ -77,7 +74,7 @@ public class BestFirstPathFinder implements PathFinder
 
 	private void addIfNotColliding(CollisionDetector collisionDetector, Collection<Point> successors, Point e)
 	{
-		if(!collisionDetector.isColliding(e.x, e.y))
+		if (!collisionDetector.isColliding(e.x, e.y))
 			successors.add(e);
 	}
 }

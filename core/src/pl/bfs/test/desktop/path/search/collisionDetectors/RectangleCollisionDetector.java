@@ -23,9 +23,7 @@ public class RectangleCollisionDetector implements CollisionDetector
 		return !(collisionMap.isEmptySpace(x - objectWidth/2, y - objectHeight/2) 
 				&& collisionMap.isEmptySpace(x + objectWidth/2, y - objectHeight/2)
 				&& collisionMap.isEmptySpace(x - objectWidth/2, y + objectHeight/2) 
-				&& collisionMap.isEmptySpace(x + objectWidth/2, y + objectHeight/2) 
-				&& collisionMap.isEmptySpace(x, y));
-		//return !collisionMap.isEmptySpace(x, y);
+				&& collisionMap.isEmptySpace(x + objectWidth/2, y + objectHeight/2));
 	}
 
 }
