@@ -14,6 +14,7 @@ import pl.bfs.test.desktop.path.search.distanceComparators.DistanceComparator;
 
 public class BestFirstPathFinder implements PathFinder
 {
+	private static final int STEP_VALUE = 10;
 
 	@Override
 	public Collection<? extends Point> find(Point from, Point destination, DistanceComparator distanceComparator,
@@ -24,12 +25,15 @@ public class BestFirstPathFinder implements PathFinder
 		HashSet<Point> closedList = new HashSet<>();
 		openList.add(from);
 		Point n = null; 
+		Point closestNode = from;
 		while (!openList.isEmpty())
 		{
 			n = openList.pollFirst();
 			if (n.equals(destination))
 				return createPath(from, destination, parents);
-
+			if(distanceComparator.compare(closestNode, n) > 0)
+				closestNode = n;
+			
 			closedList.add(n);
 			List<Point> successors = createSuccessors(n, collisionDetector);
 			for (Point successor: successors)
@@ -43,7 +47,7 @@ public class BestFirstPathFinder implements PathFinder
 			}
 		}
 
-		return createPath(from, n, parents);
+		return createPath(from, closestNode, parents);
 	}
 
 	private Collection<? extends Point> createPath(Point startPoint, Point endPoint, Map<Point, Point> parents)
@@ -63,10 +67,10 @@ public class BestFirstPathFinder implements PathFinder
 	private List<Point> createSuccessors(Point n, CollisionDetector collisionDetector)
 	{
 		List<Point> successors = new ArrayList<>();
-		addIfNotColliding(collisionDetector, successors, new Point(n.x - 10, n.y));
-		addIfNotColliding(collisionDetector, successors, new Point(n.x, n.y - 10));
-		addIfNotColliding(collisionDetector, successors, new Point(n.x + 10, n.y));
-		addIfNotColliding(collisionDetector, successors, new Point(n.x, n.y + 10));
+		addIfNotColliding(collisionDetector, successors, new Point(n.x - STEP_VALUE, n.y));
+		addIfNotColliding(collisionDetector, successors, new Point(n.x, n.y - STEP_VALUE));
+		addIfNotColliding(collisionDetector, successors, new Point(n.x + STEP_VALUE, n.y));
+		addIfNotColliding(collisionDetector, successors, new Point(n.x, n.y + STEP_VALUE));
 		return successors;
 	}
 
