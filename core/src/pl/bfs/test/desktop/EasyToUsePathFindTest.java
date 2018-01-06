@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import com.badlogic.gdx.math.Rectangle;
 
+import pl.bfs.test.desktop.path.search.APrimPathFinder;
 import pl.bfs.test.desktop.path.search.BestFirstPathFinder;
 import pl.bfs.test.desktop.path.search.PathFinder;
 import pl.bfs.test.desktop.path.search.collisionDetectors.CollisionDetector;
@@ -18,19 +19,19 @@ public class EasyToUsePathFindTest extends PathFindTest
 	@Override
 	protected PathFinder getPathFinder()
 	{
-		return new BestFirstPathFinder();
+		return new APrimPathFinder();
 	}
-	
+
 	@Override
 	protected Point getStartPoint()
 	{
-		return new Point(10, 10);
+		return new Point(100, 100);
 	}
 
 	@Override
 	protected Point getEndPoint()
 	{
-		return new Point(400, 370);
+		return new Point(400, 450);
 	}
 	
 	@Override
