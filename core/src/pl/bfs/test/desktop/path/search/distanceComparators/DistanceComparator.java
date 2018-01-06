@@ -12,14 +12,19 @@ public abstract class DistanceComparator implements Comparator<Point>
 	{
 		this.destination = new Point(destination);
 	}
-	
+
 	@Override
 	public int compare(Point first, Point second)
 	{
 		double distance = getDistance(first, destination) - getDistance(second, destination);
-		if(distance > -nearZero && distance < nearZero)
-			return 0;
-		if(distance < 0)
+		if (distance > -nearZero && distance < nearZero)
+		{
+			if(first.x == second.x && first.y == second.y)
+				return 0;
+			return first.hashCode() - second.hashCode();
+		}
+
+		if (distance < 0)
 			return -1;
 		return 1;
 	}

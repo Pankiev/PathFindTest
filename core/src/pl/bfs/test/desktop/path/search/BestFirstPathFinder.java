@@ -3,11 +3,11 @@ package pl.bfs.test.desktop.path.search;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.TreeSet;
 
 import pl.bfs.test.desktop.path.search.collisionDetectors.CollisionDetector;
 import pl.bfs.test.desktop.path.search.distanceComparators.DistanceComparator;
@@ -20,13 +20,13 @@ public class BestFirstPathFinder implements PathFinder
 			CollisionDetector collisionDetector)
 	{
 		Map<Point, Point> parents = new HashMap<>();
-		PriorityQueue<Point> openList = new PriorityQueue<>(distanceComparator);
-		List<Point> closedList = new ArrayList<>();
+		TreeSet<Point> openList = new TreeSet<>(distanceComparator);
+		HashSet<Point> closedList = new HashSet<>();
 		openList.add(from);
 		Point n = null; 
 		while (!openList.isEmpty())
 		{
-			n = openList.poll(); 
+			n = openList.pollFirst();
 			if (n.equals(destination))
 				return createPath(from, destination, parents);
 
@@ -34,10 +34,10 @@ public class BestFirstPathFinder implements PathFinder
 			List<Point> successors = createSuccessors(n, collisionDetector);
 			for (Point successor: successors)
 			{
-				if (!closedList.contains(successor) && !openList.contains(successor))
+				if (!closedList.contains(successor))
 				{
 					openList.add(successor);
-					if (!parents.containsKey(successor))
+					if (!parents.containsKey(successor)) 
 						parents.put(successor, n);
 				}
 			}
@@ -56,9 +56,7 @@ public class BestFirstPathFinder implements PathFinder
 			path.add(current);
 			current = parents.get(current);
 		}
-		path.add(current);
-
-		Collections.reverse(path);
+		path.add(current); 
 		return path;
 	}
 
