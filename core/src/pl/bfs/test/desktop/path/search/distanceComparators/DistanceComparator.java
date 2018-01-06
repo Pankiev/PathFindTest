@@ -24,5 +24,5 @@ public abstract class DistanceComparator implements Comparator<Point>
 		return 1;
 	}
 
-	protected abstract double getDistance(Point from, Point to);
+	public abstract double getDistance(Point from, Point to);
 }

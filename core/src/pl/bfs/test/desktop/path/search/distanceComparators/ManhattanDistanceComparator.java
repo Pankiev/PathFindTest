@@ -10,7 +10,7 @@ public class ManhattanDistanceComparator extends DistanceComparator
 	}
 
 	@Override
-	protected double getDistance(Point from, Point to)
+	public double getDistance(Point from, Point to)
 	{
 		return Math.abs(from.x - to.x) + Math.abs(from.y - to.y);
 	}

@@ -24,13 +24,13 @@ public class EasyToUsePathFindTest extends PathFindTest
 	@Override
 	protected Point getStartPoint()
 	{
-		return new Point(100, 100);
+		return new Point(10, 10);
 	}
 
 	@Override
 	protected Point getEndPoint()
 	{
-		return new Point(400, 150);
+		return new Point(400, 370);
 	}
 	
 	@Override
